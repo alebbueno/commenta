@@ -21,7 +21,7 @@ export function Pricing() {
   return (
     <section
       id="planos"
-      className="border-b border-border/40 bg-muted/30 py-20 sm:py-24"
+      className="border-b border-border/40 bg-muted/30 py-14 sm:py-20 md:py-24"
     >
       <div className="container mx-auto max-w-5xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
@@ -31,22 +31,22 @@ export function Pricing() {
               {t.pricingLabel}
             </span>
           </div>
-          <h2 className="mt-6 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground sm:mt-6 sm:text-3xl md:text-4xl">
             {t.pricingTitle}
           </h2>
-          <p className="mt-4 text-muted-foreground">{t.pricingSub}</p>
+          <p className="mt-3 text-muted-foreground sm:mt-4">{t.pricingSub}</p>
         </div>
 
-        <div className="mt-10 flex flex-col items-center gap-2">
+        <div className="mt-6 flex flex-col items-center gap-2 sm:mt-10">
           <div className="inline-flex rounded-full border border-border bg-card p-1 shadow-sm">
             <button
               type="button"
               onClick={() => setIsAnnual(false)}
               className={cn(
-                "rounded-full px-5 py-2.5 text-sm font-semibold transition-colors",
+                "min-h-[44px] touch-manipulation rounded-full px-4 py-2.5 text-sm font-semibold transition-colors sm:px-5",
                 !isAnnual
                   ? "bg-header-accent text-white shadow"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:text-foreground active:bg-muted/50"
               )}
             >
               {t.pricingMonthly}
@@ -55,10 +55,10 @@ export function Pricing() {
               type="button"
               onClick={() => setIsAnnual(true)}
               className={cn(
-                "rounded-full px-5 py-2.5 text-sm font-semibold transition-colors",
+                "min-h-[44px] touch-manipulation rounded-full px-4 py-2.5 text-sm font-semibold transition-colors sm:px-5",
                 isAnnual
                   ? "bg-header-accent text-white shadow"
-                  : "text-muted-foreground hover:text-foreground"
+                  : "text-muted-foreground hover:text-foreground active:bg-muted/50"
               )}
             >
               {t.pricingAnnual}
@@ -71,7 +71,7 @@ export function Pricing() {
           )}
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-[6fr_4fr] lg:gap-8">
+        <div className="mt-8 grid grid-cols-1 gap-4 sm:mt-10 sm:gap-6 sm:grid-cols-[6fr_4fr] lg:gap-8">
           <article
             className={cn(
               "relative flex flex-col rounded-2xl bg-header-accent p-6 text-white shadow-lg min-w-0",

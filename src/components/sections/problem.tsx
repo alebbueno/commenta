@@ -25,7 +25,7 @@ export function Problem() {
   return (
     <section
       id="problema"
-      className="border-b border-border/40 bg-background py-20 sm:py-24"
+      className="border-b border-border/40 bg-background py-14 sm:py-20 md:py-24"
     >
       <div className="container mx-auto max-w-4xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
@@ -35,14 +35,14 @@ export function Problem() {
               {t.problemLabel}
             </span>
           </div>
-          <h2 className="mt-6 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground sm:mt-6 sm:text-3xl md:text-4xl">
             {t.problemTitle}
             <span className="text-muted-foreground">{t.problemTitleMuted}</span>
           </h2>
-          <p className="mt-4 text-muted-foreground">{t.problemSub}</p>
+          <p className="mt-3 text-muted-foreground sm:mt-4">{t.problemSub}</p>
         </div>
 
-        <ul className="mt-12 space-y-4 sm:space-y-5">
+        <ul className="mt-8 space-y-3 sm:mt-12 sm:space-y-4 md:space-y-5">
           {t.problemBullets.map((text, i) => {
             const Icon = bulletIcons[i];
             return (

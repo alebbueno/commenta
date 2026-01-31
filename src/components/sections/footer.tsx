@@ -47,10 +47,10 @@ export function Footer() {
   return (
     <footer className="bg-black text-white">
       <div className="border-b border-white/10">
-        <div className="container mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
+        <div className="container mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-10">
           <div className="flex flex-col items-center gap-4 text-center sm:flex-row sm:justify-between sm:text-left">
             <div>
-              <p className="text-lg font-semibold text-white">
+              <p className="text-base font-semibold text-white sm:text-lg">
                 {t.footerCtaTitle}
               </p>
               <p className="mt-1 text-sm text-white/70">{t.footerCtaSub}</p>
@@ -58,7 +58,7 @@ export function Footer() {
             <Button
               variant="header-accent"
               size="sm"
-              className="shrink-0 rounded-full"
+              className="h-11 w-full min-h-[44px] shrink-0 rounded-full sm:w-auto"
               asChild
             >
               <Link href="#planos">{t.footerCtaButton}</Link>
@@ -67,8 +67,8 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="container mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-14">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="container mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+        <div className="grid gap-8 sm:gap-10 sm:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
             <Link href="/" className="inline-block" aria-label="Commenta">
               <Image
@@ -116,7 +116,7 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 sm:flex-row">
+        <div className="mt-10 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:mt-14 sm:flex-row sm:pt-8">
           <p className="text-sm text-white/60">
             © {new Date().getFullYear()} Commenta. {t.footerCopyright}
           </p>

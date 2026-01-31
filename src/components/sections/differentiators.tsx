@@ -251,27 +251,40 @@ export function Differentiators() {
   return (
     <section
       id="diferenciais"
-      className="border-b border-border/40 bg-muted/30 py-20 sm:py-24"
+      className="border-b border-border/40 bg-muted/30 py-14 sm:py-20 md:py-24"
     >
       <div className="container mx-auto max-w-6xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
             {t.diffLabel}
           </p>
-          <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h2 className="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
             {t.diffTitle}
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground">{t.diffSub}</p>
+          <p className="mt-3 text-base text-muted-foreground sm:mt-4 sm:text-lg">
+            {t.diffSub}
+          </p>
         </div>
 
-        <div className="mt-14 grid min-h-[480px] gap-8 md:grid-cols-2 md:items-start md:gap-12 lg:gap-16">
-          <div className="flex flex-col gap-2.5">
+        <div className="mt-8 grid min-h-0 gap-6 sm:mt-14 sm:min-h-[420px] md:grid-cols-2 md:items-start md:gap-12 md:min-h-[480px] lg:gap-16">
+          {/* Mobile: conteúdo em cima, lista embaixo; desktop: lista à esquerda */}
+          <div className="order-2 flex flex-col gap-2.5 md:order-1">
             {cards.map(({ icon: Icon, title, iconBg, content }, i) => (
               <article
                 key={i}
                 onMouseEnter={() => setActiveIndex(i)}
+                onClick={() => setActiveIndex(i)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setActiveIndex(i);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
                 className={cn(
-                  "flex cursor-pointer items-center gap-4 rounded-2xl border px-4 py-3.5 transition-all duration-200",
+                  "flex cursor-pointer items-center gap-4 rounded-2xl border px-4 py-3.5 transition-all duration-200 min-h-[56px] touch-manipulation",
+                  "active:scale-[0.98] md:active:scale-100",
                   activeIndex === i
                     ? "border-primary/40 bg-primary/5 shadow-sm ring-1 ring-primary/20"
                     : "border-border/50 bg-card shadow-sm hover:border-border hover:bg-muted/40 hover:shadow-md"
@@ -292,7 +305,7 @@ export function Differentiators() {
             ))}
           </div>
 
-          <div className="min-h-[420px] md:pl-2">
+          <div className="order-1 min-h-[320px] sm:min-h-[380px] md:order-2 md:min-h-[420px] md:pl-2">
             <div key={activeIndex} className="animate-fade-in">
               {active?.content}
             </div>

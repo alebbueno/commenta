@@ -25,7 +25,7 @@ export function CommentaPresentation() {
   return (
     <section
       id="recursos"
-      className="border-b border-border/40 bg-muted/20 py-20 sm:py-24"
+      className="border-b border-border/40 bg-muted/20 py-14 sm:py-20 md:py-24"
     >
       <div className="container mx-auto max-w-6xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
@@ -35,14 +35,14 @@ export function CommentaPresentation() {
               {t.recursosLabel}
             </span>
           </div>
-          <h2 className="mt-6 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground sm:mt-6 sm:text-3xl md:text-4xl">
             {t.recursosTitle}
             <span className="block text-foreground">{t.recursosTitleLine2}</span>
           </h2>
         </div>
 
-        <div className="mt-12 overflow-hidden rounded-3xl border border-border/60 bg-card shadow-xl shadow-foreground/5">
-          <div className="grid gap-8 p-6 sm:p-8 md:grid-cols-2 md:gap-12 lg:p-10">
+        <div className="mt-8 overflow-hidden rounded-2xl border border-border/60 bg-card shadow-xl shadow-foreground/5 sm:mt-12 sm:rounded-3xl">
+          <div className="grid gap-6 p-4 sm:gap-8 sm:p-8 md:grid-cols-2 md:gap-12 lg:p-10">
             <div className="relative flex items-center justify-center min-h-[280px] sm:min-h-[320px]">
               <div className="absolute right-0 top-1/2 w-[85%] -translate-y-1/2 rounded-2xl border border-border/60 bg-muted/40 p-5 shadow-lg">
                 <p className="text-xs font-medium text-muted-foreground">

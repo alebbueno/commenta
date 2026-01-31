@@ -56,7 +56,18 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 6rem; /* espaço para o header fixo ao rolar até a âncora */
+  scroll-padding-top: 5.5rem; /* mobile: espaço para o header ao rolar */
+}
+
+@media (min-width: 640px) {
+  html {
+    scroll-padding-top: 6rem;
+  }
+}
+
+/* Safe area para notched devices (iPhone etc.) */
+.safe-area-inset-top {
+  padding-top: max(0.75rem, env(safe-area-inset-top, 0px));
 }
 
 body {

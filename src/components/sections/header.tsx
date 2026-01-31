@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Menu, X } from "lucide-react";
@@ -27,11 +27,25 @@ export function Header() {
     setMobileOpen(false);
   };
 
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+      document.body.style.touchAction = "none";
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+    };
+  }, [mobileOpen]);
+
   return (
-    <header className="sticky top-0 z-50 w-full px-4 pt-4 sm:px-6 sm:pt-5">
+    <header className="sticky top-0 z-50 w-full px-3 pt-3 sm:px-6 sm:pt-5 safe-area-inset-top">
       <div
         className={cn(
-          "mx-auto flex h-14 w-full max-w-6xl items-center justify-between gap-4 rounded-2xl border border-white/5 px-4 shadow-lg shadow-black/20 sm:h-16 sm:px-5 md:px-6",
+          "mx-auto flex h-14 min-h-[52px] w-full max-w-6xl items-center justify-between gap-3 rounded-2xl border border-white/5 px-3 shadow-lg shadow-black/20 sm:h-16 sm:px-5 md:px-6",
           "bg-black/90 text-white backdrop-blur-xl"
         )}
       >
@@ -154,7 +168,7 @@ export function Header() {
           <button
             type="button"
             onClick={() => setMobileOpen(true)}
-            className="flex size-10 items-center justify-center rounded-xl text-white/90 hover:bg-white/10 hover:text-white"
+            className="flex size-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-xl text-white/90 hover:bg-white/10 hover:text-white active:bg-white/15"
             aria-label={locale === "pt" ? "Abrir menu" : "Open menu"}
           >
             <Menu className="size-6" />
@@ -173,17 +187,17 @@ export function Header() {
       />
       <div
         className={cn(
-          "fixed top-0 right-0 z-50 flex h-full w-full max-w-sm flex-col gap-6 border-l border-white/10 bg-black/95 p-6 shadow-2xl transition-transform duration-300 ease-out md:hidden",
+          "fixed inset-y-0 right-0 z-50 flex h-full w-full max-w-[min(100vw,28rem)] flex-col gap-4 border-l border-white/10 bg-black/98 p-4 pb-[env(safe-area-inset-bottom)] pt-[max(1.5rem,env(safe-area-inset-top))] shadow-2xl transition-transform duration-300 ease-out md:hidden",
           mobileOpen ? "translate-x-0" : "translate-x-full"
         )}
         role="dialog"
         aria-modal="true"
         aria-label="Menu"
       >
-        <div className="flex items-center justify-between">
+        <div className="flex min-h-[44px] items-center justify-between">
           <Link
             href="/"
-            className="py-2"
+            className="py-2 pr-2 -ml-2 min-h-[44px] min-w-[44px] flex items-center"
             aria-label="Commenta"
             onClick={() => setMobileOpen(false)}
           >
@@ -198,51 +212,51 @@ export function Header() {
           <button
             type="button"
             onClick={() => setMobileOpen(false)}
-            className="flex size-10 items-center justify-center rounded-xl text-white/90 hover:bg-white/10 hover:text-white"
+            className="flex size-11 min-h-[44px] min-w-[44px] items-center justify-center rounded-xl text-white/90 hover:bg-white/10 hover:text-white active:bg-white/15"
             aria-label={locale === "pt" ? "Fechar menu" : "Close menu"}
           >
             <X className="size-6" />
           </button>
         </div>
-        <nav className="flex flex-1 flex-col gap-1" aria-label="Main">
+        <nav className="flex flex-1 flex-col gap-0.5 overflow-y-auto" aria-label="Main">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
-              className="rounded-xl px-4 py-3.5 text-base font-medium text-white transition-colors hover:bg-white/10"
+              className="min-h-[48px] flex items-center rounded-xl px-4 py-3 text-base font-medium text-white transition-colors hover:bg-white/10 active:bg-white/15"
             >
               {item.label}
             </Link>
           ))}
         </nav>
-        <div className="flex flex-col gap-2 border-t border-white/10 pt-6">
-          <div className="flex items-center justify-between px-4 py-2">
+        <div className="flex shrink-0 flex-col gap-2 border-t border-white/10 pt-4">
+          <div className="flex items-center justify-between px-2 py-1">
             <span className="text-sm text-white/70">
               {locale === "pt" ? "Idioma" : "Language"}
             </span>
             <div className="flex rounded-full border border-white/20 bg-white/5 p-0.5">
               <button
                 type="button"
-                onClick={() => switchLocale("pt")}
                 className={cn(
-                  "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  "min-h-[44px] rounded-full px-4 py-2.5 text-sm font-medium transition-colors",
                   locale === "pt"
                     ? "bg-white text-black"
-                    : "text-white/80 hover:text-white"
+                    : "text-white/80 hover:text-white active:bg-white/10"
                 )}
+                onClick={() => switchLocale("pt")}
               >
                 PT
               </button>
               <button
                 type="button"
-                onClick={() => switchLocale("en")}
                 className={cn(
-                  "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  "min-h-[44px] rounded-full px-4 py-2.5 text-sm font-medium transition-colors",
                   locale === "en"
                     ? "bg-white text-black"
-                    : "text-white/80 hover:text-white"
+                    : "text-white/80 hover:text-white active:bg-white/10"
                 )}
+                onClick={() => switchLocale("en")}
               >
                 EN
               </button>
@@ -251,14 +265,14 @@ export function Header() {
           <Link
             href="#login"
             onClick={() => setMobileOpen(false)}
-            className="rounded-xl px-4 py-3.5 text-center text-base font-medium text-white/90 transition-colors hover:bg-white/10"
+            className="min-h-[48px] flex items-center justify-center rounded-xl px-4 py-3.5 text-base font-medium text-white/90 transition-colors hover:bg-white/10 active:bg-white/15"
           >
             {t.accessAccount}
           </Link>
           <Button
             variant="header-accent"
             size="lg"
-            className="w-full rounded-full font-semibold"
+            className="h-12 w-full min-h-[48px] rounded-full font-semibold"
             asChild
           >
             <Link href="#planos" onClick={() => setMobileOpen(false)}>

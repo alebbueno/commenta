@@ -11,22 +11,22 @@ export function Hero() {
 
   return (
     <section className="relative overflow-hidden border-b border-border/40 bg-background bg-geometric-pattern">
-      <div className="container mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 sm:py-24 md:grid-cols-2 md:gap-20 md:py-28 lg:gap-24 lg:py-32">
+      <div className="container mx-auto grid max-w-6xl gap-8 px-4 py-14 sm:gap-12 sm:px-6 sm:py-24 md:grid-cols-2 md:gap-20 md:py-28 lg:gap-24 lg:py-32">
         <div className="flex flex-col justify-center text-center md:text-left">
-          <p className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
+          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground sm:text-sm">
             {t.heroPreHeadline}
           </p>
-          <h1 className="mt-3 text-4xl font-bold tracking-tight text-foreground sm:text-5xl sm:leading-[1.1] lg:text-6xl lg:leading-[1.08]">
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:mt-3 sm:text-4xl sm:leading-[1.1] md:text-5xl lg:text-6xl lg:leading-[1.08]">
             {t.heroHeadline}
             <span className="text-muted-foreground">{t.heroHeadlineMuted}</span>
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground sm:mt-8 sm:text-xl sm:leading-relaxed">
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:mt-6 sm:text-lg md:mt-8 md:text-xl md:leading-relaxed">
             {t.heroSub}
           </p>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4 md:justify-start sm:mt-12">
+          <div className="mt-6 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4 md:justify-start md:mt-12">
             <Button
               size="lg"
-              className="min-w-[220px] shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 sm:min-w-[240px]"
+              className="h-12 w-full min-h-[48px] shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 active:-translate-y-0.5 sm:min-w-[220px] sm:w-auto md:min-w-[240px]"
               asChild
             >
               <Link href="#planos">{t.heroCtaPrimary}</Link>
@@ -34,13 +34,13 @@ export function Hero() {
             <Button
               size="lg"
               variant="outline"
-              className="min-w-[180px] border-2 transition-all hover:bg-muted/50 hover:-translate-y-0.5"
+              className="h-12 w-full min-h-[48px] border-2 transition-all hover:bg-muted/50 active:-translate-y-0.5 sm:min-w-[180px] sm:w-auto"
               asChild
             >
               <Link href="#planos">{t.heroCtaSecondary}</Link>
             </Button>
           </div>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-6 md:justify-start">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 sm:mt-8 sm:gap-6 md:justify-start">
             <span className="flex items-center gap-2 text-sm text-muted-foreground">
               <CreditCard className="size-4 shrink-0" />
               {t.heroNoCard}
@@ -50,13 +50,13 @@ export function Hero() {
               {t.heroDaysFree}
             </span>
           </div>
-          <p className="mt-10 text-sm text-muted-foreground md:mt-12">
+          <p className="mt-6 text-xs text-muted-foreground sm:mt-10 sm:text-sm md:mt-12">
             {t.heroSocialProof}
           </p>
         </div>
 
         <div className="relative flex items-center justify-center md:justify-end">
-          <div className="relative w-full max-w-[420px]">
+          <div className="relative w-full max-w-[340px] sm:max-w-[420px]">
             <div className="relative overflow-hidden rounded-2xl border border-border/80 bg-card shadow-xl shadow-foreground/6 ring-1 ring-border/50">
               <div className="aspect-[4/3] w-full">
                 <div className="flex h-full w-full flex-col bg-gradient-to-b from-muted/40 to-muted/20 p-4 sm:p-5">

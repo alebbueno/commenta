@@ -12,27 +12,27 @@ export function SocialProof() {
   return (
     <section
       id="depoimentos"
-      className="border-b border-border/40 bg-background py-20 sm:py-24"
+      className="border-b border-border/40 bg-background py-14 sm:py-20 md:py-24"
     >
       <div className="container mx-auto max-w-6xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
             {t.testimonialsLabel}
           </p>
-          <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+          <h2 className="mt-2 text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
             {t.testimonialsTitle}
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground">
+          <p className="mt-3 text-base text-muted-foreground sm:mt-4 sm:text-lg">
             {t.testimonialsSub}
           </p>
         </div>
 
-        <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-4 sm:mt-14 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {t.testimonials.map((item, i) => (
             <article
               key={i}
               className={cn(
-                "flex flex-col rounded-2xl border border-border/50 bg-card p-6 shadow-sm",
+                "flex flex-col rounded-2xl border border-border/50 bg-card p-4 shadow-sm sm:p-6",
                 "transition-all duration-200 hover:shadow-lg hover:shadow-foreground/5"
               )}
             >
