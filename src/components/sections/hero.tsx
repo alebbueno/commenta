@@ -13,12 +13,18 @@ export function Hero() {
     <section className="relative overflow-hidden border-b border-border/40 bg-background bg-geometric-pattern">
       <div className="container mx-auto grid max-w-6xl gap-8 px-4 py-14 sm:gap-12 sm:px-6 sm:py-24 md:grid-cols-2 md:gap-20 md:py-28 lg:gap-24 lg:py-32">
         <div className="flex flex-col justify-center text-center md:text-left">
-          <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground sm:text-sm">
-            {t.heroPreHeadline}
-          </p>
+          <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
+            <span className="inline-flex items-center rounded-full border border-header-accent/40 bg-header-accent/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-header-accent sm:text-sm">
+              {t.heroPreHeadline}
+            </span>
+            <span className="text-xs text-muted-foreground sm:text-sm">
+              {t.heroPreHeadlineSub}
+            </span>
+          </div>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:mt-3 sm:text-4xl sm:leading-[1.1] md:text-5xl lg:text-6xl lg:leading-[1.08]">
             {t.heroHeadline}
-            <span className="text-muted-foreground">{t.heroHeadlineMuted}</span>
+            <span className="text-header-accent">&ldquo;{t.heroHeadlineQuote}&rdquo;</span>
+            {t.heroHeadlineEnd}
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground sm:mt-6 sm:text-lg md:mt-8 md:text-xl md:leading-relaxed">
             {t.heroSub}

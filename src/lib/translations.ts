@@ -11,11 +11,13 @@ export const translations = {
     buy: "Comprar",
 
     // Hero
-    heroPreHeadline: "Plugin WordPress para feedback visual",
+    heroPreHeadline: "Exclusivo para WordPress",
+    heroPreHeadlineSub: "Plugin de feedback visual para sites em WP",
     heroHeadline: "Chega de prints perdidos e ",
-    heroHeadlineMuted: '"ajusta ali em cima" que ninguém entende.',
+    heroHeadlineQuote: "ajusta ali em cima",
+    heroHeadlineEnd: " que ninguém entende.",
     heroSub:
-      "Você e seu cliente comentam direto na página do site. Pins, setas, círculos — tudo vira tarefa clara, com contexto visual. Sem WhatsApp infinito, sem e-mail perdido, sem retrabalho. Só aprovação rápida e entrega no prazo.",
+      "Para sites feitos em WordPress. Você e seu cliente comentam direto na página. Pins, setas, círculos — tudo vira tarefa clara, com contexto visual. Sem WhatsApp infinito, sem e-mail perdido, sem retrabalho. Só aprovação rápida e entrega no prazo.",
     heroCtaPrimary: "Testar Grátis por 14 dias (sem cartão)",
     heroCtaSecondary: "Ver planos",
     heroNoCard: "Sem cartão necessário",
@@ -45,6 +47,7 @@ export const translations = {
     recursosCardTitle: "Feedback que vira código",
     recursosCardSub:
       "Mantenha o time alinhado e leve o feedback do cliente direto para a implementação, sem WhatsApp nem e-mail perdido.",
+    recursosWordPressNote: "Desenvolvido exclusivamente para sites em WordPress.",
     recursosFeatures: [
       "Comentários visuais na página — pins, setas, círculos e áreas destacadas.",
       "Cada comentário vira tarefa com screenshot e contexto preservado.",
@@ -149,7 +152,7 @@ export const translations = {
     footerCtaSub: "Teste 14 dias grátis. Sem cartão.",
     footerCtaButton: "Começar grátis",
     footerDescription:
-      "Plugin WordPress para feedback visual. Comentários que viram tarefa, direto na página. Aprovação rápida, sem WhatsApp infinito.",
+      "Exclusivo para sites em WordPress. Plugin de feedback visual: comentários viram tarefa direto na página. Aprovação rápida, sem WhatsApp infinito.",
     footerProduct: "Produto",
     footerSupport: "Suporte",
     footerLegal: "Legal",
@@ -166,11 +169,13 @@ export const translations = {
     accessAccount: "Log in",
     buy: "Get started",
 
-    heroPreHeadline: "WordPress plugin for visual feedback",
+    heroPreHeadline: "WordPress only",
+    heroPreHeadlineSub: "Visual feedback plugin for WP sites",
     heroHeadline: "Stop losing screenshots and ",
-    heroHeadlineMuted: '"move that thing up" that nobody understands.',
+    heroHeadlineQuote: "move that thing up",
+    heroHeadlineEnd: " that nobody understands.",
     heroSub:
-      "You and your client comment right on the page. Pins, arrows, circles — everything becomes a clear task with visual context. No endless WhatsApp, no lost emails, no rework. Just fast approval and on-time delivery.",
+      "For sites built with WordPress. You and your client comment right on the page. Pins, arrows, circles — everything becomes a clear task with visual context. No endless WhatsApp, no lost emails, no rework. Just fast approval and on-time delivery.",
     heroCtaPrimary: "Try free for 14 days (no card)",
     heroCtaSecondary: "See pricing",
     heroNoCard: "No card required",
@@ -198,6 +203,7 @@ export const translations = {
     recursosCardTitle: "Feedback that turns into code",
     recursosCardSub:
       "Keep the team aligned and bring client feedback straight into implementation — no WhatsApp, no lost emails.",
+    recursosWordPressNote: "Built exclusively for WordPress sites.",
     recursosFeatures: [
       "Visual comments on the page — pins, arrows, circles, and highlighted areas.",
       "Every comment becomes a task with screenshot and context preserved.",
@@ -297,7 +303,7 @@ export const translations = {
     footerCtaSub: "Try 14 days free. No card.",
     footerCtaButton: "Start free",
     footerDescription:
-      "WordPress plugin for visual feedback. Comments that become tasks, right on the page. Fast approval, no endless WhatsApp.",
+      "For WordPress sites only. Visual feedback plugin: comments become tasks right on the page. Fast approval, no endless WhatsApp.",
     footerProduct: "Product",
     footerSupport: "Support",
     footerLegal: "Legal",
