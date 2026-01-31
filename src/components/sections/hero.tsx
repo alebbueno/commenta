@@ -1,29 +1,27 @@
+"use client";
+
 import Link from "next/link";
 import { CreditCard, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useLocale } from "@/contexts/locale-context";
 
 export function Hero() {
+  const { t } = useLocale();
+
   return (
     <section className="relative overflow-hidden border-b border-border/40 bg-background bg-geometric-pattern">
       <div className="container mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-6 sm:py-24 md:grid-cols-2 md:gap-20 md:py-28 lg:gap-24 lg:py-32">
         <div className="flex flex-col justify-center text-center md:text-left">
-          {/* Pre-headline (estilo Agenta) */}
           <p className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
-            Plugin WordPress para feedback visual
+            {t.heroPreHeadline}
           </p>
           <h1 className="mt-3 text-4xl font-bold tracking-tight text-foreground sm:text-5xl sm:leading-[1.1] lg:text-6xl lg:leading-[1.08]">
-            Chega de prints perdidos e{" "}
-            <span className="text-muted-foreground">
-              &ldquo;ajusta ali em cima&rdquo;
-            </span>{" "}
-            que ninguém entende.
+            {t.heroHeadline}
+            <span className="text-muted-foreground">{t.heroHeadlineMuted}</span>
           </h1>
           <p className="mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground sm:mt-8 sm:text-xl sm:leading-relaxed">
-            Você e seu cliente comentam direto na página do site. Pins, setas,
-            círculos — tudo vira tarefa clara, com contexto visual. Sem WhatsApp
-            infinito, sem e-mail perdido, sem retrabalho. Só aprovação rápida e
-            entrega no prazo.
+            {t.heroSub}
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4 md:justify-start sm:mt-12">
             <Button
@@ -31,7 +29,7 @@ export function Hero() {
               className="min-w-[220px] shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 sm:min-w-[240px]"
               asChild
             >
-              <Link href="#planos">Testar Grátis por 14 dias (sem cartão)</Link>
+              <Link href="#planos">{t.heroCtaPrimary}</Link>
             </Button>
             <Button
               size="lg"
@@ -39,23 +37,21 @@ export function Hero() {
               className="min-w-[180px] border-2 transition-all hover:bg-muted/50 hover:-translate-y-0.5"
               asChild
             >
-              <Link href="#planos">Ver planos</Link>
+              <Link href="#planos">{t.heroCtaSecondary}</Link>
             </Button>
           </div>
-          {/* Value props com ícones (estilo Agenta) */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-6 md:justify-start">
             <span className="flex items-center gap-2 text-sm text-muted-foreground">
               <CreditCard className="size-4 shrink-0" />
-              Sem cartão necessário
+              {t.heroNoCard}
             </span>
             <span className="flex items-center gap-2 text-sm text-muted-foreground">
               <Clock className="size-4 shrink-0" />
-              14 dias grátis
+              {t.heroDaysFree}
             </span>
           </div>
           <p className="mt-10 text-sm text-muted-foreground md:mt-12">
-            Já usado por +80 agências e freelancers que cansaram do caos de
-            aprovação
+            {t.heroSocialProof}
           </p>
         </div>
 

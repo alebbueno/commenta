@@ -23,6 +23,9 @@ const buttonVariants = cva(
         /* Header: CTA laranja (pill) */
         "header-accent":
           "bg-header-accent text-white shadow hover:bg-header-accent/90",
+        /* Card PRO: fundo branco, texto laranja */
+        "solid-inverse":
+          "bg-white text-header-accent shadow hover:bg-white/95 hover:text-header-accent",
       },
       size: {
         default: "h-10 px-5 py-2",

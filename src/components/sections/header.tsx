@@ -6,16 +6,26 @@ import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useLocale } from "@/contexts/locale-context";
+import type { Locale } from "@/lib/locale";
 
-const navItems = [
-  { label: "Recursos", href: "#recursos" },
-  { label: "Diferenciais", href: "#diferenciais" },
-  { label: "Planos", href: "#planos" },
-  { label: "Depoimentos", href: "#depoimentos" },
+const navKeys = [
+  { key: "navRecursos" as const, href: "#recursos" },
+  { key: "navDiferenciais" as const, href: "#diferenciais" },
+  { key: "navPlanos" as const, href: "#planos" },
+  { key: "navDepoimentos" as const, href: "#depoimentos" },
 ];
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { locale, setLocale, t } = useLocale();
+
+  const navItems = navKeys.map(({ key, href }) => ({ label: t[key], href }));
+
+  const switchLocale = (next: Locale) => {
+    setLocale(next);
+    setMobileOpen(false);
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full px-4 pt-4 sm:px-6 sm:pt-5">
@@ -29,7 +39,7 @@ export function Header() {
         <Link
           href="/"
           className="shrink-0 py-2"
-          aria-label="Commenta - início"
+          aria-label="Commenta"
           onClick={() => setMobileOpen(false)}
         >
           <Image
@@ -42,10 +52,10 @@ export function Header() {
           />
         </Link>
 
-        {/* Nav desktop: centralizado */}
+        {/* Nav desktop */}
         <nav
           className="hidden flex-1 items-center justify-center gap-0.5 md:flex"
-          aria-label="Principal"
+          aria-label="Main"
         >
           {navItems.map((item) => (
             <Link
@@ -61,13 +71,43 @@ export function Header() {
           ))}
         </nav>
 
-        {/* CTAs desktop */}
+        {/* Idioma + CTAs desktop */}
         <div className="hidden shrink-0 items-center gap-2 md:flex sm:gap-3">
+          <div
+            className="flex items-center rounded-full border border-white/20 bg-white/5 p-0.5"
+            role="group"
+            aria-label="Language"
+          >
+            <button
+              type="button"
+              onClick={() => setLocale("pt")}
+              className={cn(
+                "rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
+                locale === "pt"
+                  ? "bg-white text-black"
+                  : "text-white/80 hover:text-white"
+              )}
+            >
+              PT
+            </button>
+            <button
+              type="button"
+              onClick={() => setLocale("en")}
+              className={cn(
+                "rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
+                locale === "en"
+                  ? "bg-white text-black"
+                  : "text-white/80 hover:text-white"
+              )}
+            >
+              EN
+            </button>
+          </div>
           <Link
             href="#login"
             className="rounded-full px-4 py-2.5 text-sm font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white whitespace-nowrap"
           >
-            Acessar conta
+            {t.accessAccount}
           </Link>
           <Button
             variant="header-accent"
@@ -75,19 +115,51 @@ export function Header() {
             className="rounded-full font-semibold"
             asChild
           >
-            <Link href="#planos">Comprar</Link>
+            <Link href="#planos">{t.buy}</Link>
           </Button>
         </div>
 
-        {/* Botão mobile: abrir menu */}
-        <button
-          type="button"
-          onClick={() => setMobileOpen(true)}
-          className="flex size-10 items-center justify-center rounded-xl text-white/90 hover:bg-white/10 hover:text-white md:hidden"
-          aria-label="Abrir menu"
-        >
-          <Menu className="size-6" />
-        </button>
+        {/* Mobile: idioma + hamburger */}
+        <div className="flex items-center gap-1 md:hidden">
+          <div
+            className="flex items-center rounded-full border border-white/20 bg-white/5 p-0.5"
+            role="group"
+            aria-label="Language"
+          >
+            <button
+              type="button"
+              onClick={() => setLocale("pt")}
+              className={cn(
+                "rounded-full px-2.5 py-1 text-xs font-medium transition-colors",
+                locale === "pt"
+                  ? "bg-white text-black"
+                  : "text-white/80 hover:text-white"
+              )}
+            >
+              PT
+            </button>
+            <button
+              type="button"
+              onClick={() => setLocale("en")}
+              className={cn(
+                "rounded-full px-2.5 py-1 text-xs font-medium transition-colors",
+                locale === "en"
+                  ? "bg-white text-black"
+                  : "text-white/80 hover:text-white"
+              )}
+            >
+              EN
+            </button>
+          </div>
+          <button
+            type="button"
+            onClick={() => setMobileOpen(true)}
+            className="flex size-10 items-center justify-center rounded-xl text-white/90 hover:bg-white/10 hover:text-white"
+            aria-label={locale === "pt" ? "Abrir menu" : "Open menu"}
+          >
+            <Menu className="size-6" />
+          </button>
+        </div>
       </div>
 
       {/* Overlay + painel mobile */}
@@ -127,12 +199,12 @@ export function Header() {
             type="button"
             onClick={() => setMobileOpen(false)}
             className="flex size-10 items-center justify-center rounded-xl text-white/90 hover:bg-white/10 hover:text-white"
-            aria-label="Fechar menu"
+            aria-label={locale === "pt" ? "Fechar menu" : "Close menu"}
           >
             <X className="size-6" />
           </button>
         </div>
-        <nav className="flex flex-1 flex-col gap-1" aria-label="Principal">
+        <nav className="flex flex-1 flex-col gap-1" aria-label="Main">
           {navItems.map((item) => (
             <Link
               key={item.href}
@@ -145,12 +217,43 @@ export function Header() {
           ))}
         </nav>
         <div className="flex flex-col gap-2 border-t border-white/10 pt-6">
+          <div className="flex items-center justify-between px-4 py-2">
+            <span className="text-sm text-white/70">
+              {locale === "pt" ? "Idioma" : "Language"}
+            </span>
+            <div className="flex rounded-full border border-white/20 bg-white/5 p-0.5">
+              <button
+                type="button"
+                onClick={() => switchLocale("pt")}
+                className={cn(
+                  "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  locale === "pt"
+                    ? "bg-white text-black"
+                    : "text-white/80 hover:text-white"
+                )}
+              >
+                PT
+              </button>
+              <button
+                type="button"
+                onClick={() => switchLocale("en")}
+                className={cn(
+                  "rounded-full px-4 py-2 text-sm font-medium transition-colors",
+                  locale === "en"
+                    ? "bg-white text-black"
+                    : "text-white/80 hover:text-white"
+                )}
+              >
+                EN
+              </button>
+            </div>
+          </div>
           <Link
             href="#login"
             onClick={() => setMobileOpen(false)}
             className="rounded-xl px-4 py-3.5 text-center text-base font-medium text-white/90 transition-colors hover:bg-white/10"
           >
-            Acessar conta
+            {t.accessAccount}
           </Link>
           <Button
             variant="header-accent"
@@ -159,7 +262,7 @@ export function Header() {
             asChild
           >
             <Link href="#planos" onClick={() => setMobileOpen(false)}>
-              Comprar
+              {t.buy}
             </Link>
           </Button>
         </div>
