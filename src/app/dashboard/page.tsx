@@ -40,7 +40,10 @@ function formatMemberSince(isoDate: string | undefined, locale: string) {
   }).format(date);
 }
 
-function getStatusLabel(status: string | undefined, t: Record<string, string>) {
+function getStatusLabel(
+  status: string | undefined,
+  t: { dashboardStatusActive: string; dashboardStatusCanceled: string; dashboardStatusPastDue: string }
+) {
   if (!status || status === "active") return t.dashboardStatusActive;
   if (status === "canceled" || status === "cancelled") return t.dashboardStatusCanceled;
   if (status === "past_due") return t.dashboardStatusPastDue;
