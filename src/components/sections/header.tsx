@@ -7,6 +7,7 @@ import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLocale } from "@/contexts/locale-context";
+import { useAuth } from "@/contexts/auth-context";
 import type { Locale } from "@/lib/locale";
 
 const navKeys = [
@@ -19,6 +20,7 @@ const navKeys = [
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { locale, setLocale, t } = useLocale();
+  const { user, loading } = useAuth();
 
   const navItems = navKeys.map(({ key, href }) => ({ label: t[key], href }));
 
@@ -117,20 +119,42 @@ export function Header() {
               EN
             </button>
           </div>
-          <Link
-            href="#login"
-            className="rounded-full px-4 py-2.5 text-sm font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white whitespace-nowrap"
-          >
-            {t.accessAccount}
-          </Link>
-          <Button
-            variant="header-accent"
-            size="sm"
-            className="rounded-full font-semibold"
-            asChild
-          >
-            <Link href="#planos">{t.buy}</Link>
-          </Button>
+          {!loading &&
+            (user ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  className="rounded-full px-4 py-2.5 text-sm font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white whitespace-nowrap"
+                >
+                  {t.dashboard}
+                </Link>
+                <Button
+                  variant="header-accent"
+                  size="sm"
+                  className="rounded-full font-semibold"
+                  asChild
+                >
+                  <Link href="/dashboard">{t.buy}</Link>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="rounded-full px-4 py-2.5 text-sm font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white whitespace-nowrap"
+                >
+                  {t.accessAccount}
+                </Link>
+                <Button
+                  variant="header-accent"
+                  size="sm"
+                  className="rounded-full font-semibold"
+                  asChild
+                >
+                  <Link href="#planos">{t.buy}</Link>
+                </Button>
+              </>
+            ))}
         </div>
 
         {/* Mobile: idioma + hamburger */}
@@ -262,23 +286,48 @@ export function Header() {
               </button>
             </div>
           </div>
-          <Link
-            href="#login"
-            onClick={() => setMobileOpen(false)}
-            className="min-h-[48px] flex items-center justify-center rounded-xl px-4 py-3.5 text-base font-medium text-white/90 transition-colors hover:bg-white/10 active:bg-white/15"
-          >
-            {t.accessAccount}
-          </Link>
-          <Button
-            variant="header-accent"
-            size="lg"
-            className="h-12 w-full min-h-[48px] rounded-full font-semibold"
-            asChild
-          >
-            <Link href="#planos" onClick={() => setMobileOpen(false)}>
-              {t.buy}
-            </Link>
-          </Button>
+          {!loading &&
+            (user ? (
+              <>
+                <Link
+                  href="/dashboard"
+                  onClick={() => setMobileOpen(false)}
+                  className="min-h-[48px] flex items-center justify-center rounded-xl px-4 py-3.5 text-base font-medium text-white/90 transition-colors hover:bg-white/10 active:bg-white/15"
+                >
+                  {t.dashboard}
+                </Link>
+                <Button
+                  variant="header-accent"
+                  size="lg"
+                  className="h-12 w-full min-h-[48px] rounded-full font-semibold"
+                  asChild
+                >
+                  <Link href="/dashboard" onClick={() => setMobileOpen(false)}>
+                    {t.buy}
+                  </Link>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  onClick={() => setMobileOpen(false)}
+                  className="min-h-[48px] flex items-center justify-center rounded-xl px-4 py-3.5 text-base font-medium text-white/90 transition-colors hover:bg-white/10 active:bg-white/15"
+                >
+                  {t.accessAccount}
+                </Link>
+                <Button
+                  variant="header-accent"
+                  size="lg"
+                  className="h-12 w-full min-h-[48px] rounded-full font-semibold"
+                  asChild
+                >
+                  <Link href="#planos" onClick={() => setMobileOpen(false)}>
+                    {t.buy}
+                  </Link>
+                </Button>
+              </>
+            ))}
         </div>
       </div>
     </header>

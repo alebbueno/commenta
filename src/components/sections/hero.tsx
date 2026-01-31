@@ -5,13 +5,15 @@ import { CreditCard, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLocale } from "@/contexts/locale-context";
+import { HeroFloatingIcons } from "./hero-floating-icons";
 
 export function Hero() {
   const { t } = useLocale();
 
   return (
     <section className="relative overflow-hidden border-b border-border/40 bg-background bg-geometric-pattern">
-      <div className="container mx-auto grid max-w-6xl gap-8 px-4 py-14 sm:gap-12 sm:px-6 sm:py-24 md:grid-cols-2 md:gap-20 md:py-28 lg:gap-24 lg:py-32">
+      <HeroFloatingIcons />
+      <div className="container relative z-10 mx-auto grid max-w-6xl gap-8 px-4 py-14 sm:gap-12 sm:px-6 sm:py-24 md:grid-cols-2 md:gap-20 md:py-28 lg:gap-24 lg:py-32">
         <div className="flex flex-col justify-center text-center md:text-left">
           <div className="flex flex-wrap items-center justify-center gap-2 md:justify-start">
             <span className="inline-flex items-center rounded-full border border-header-accent/40 bg-header-accent/10 px-3 py-1 text-xs font-semibold uppercase tracking-wider text-header-accent sm:text-sm">

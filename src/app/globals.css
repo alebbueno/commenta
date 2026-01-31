@@ -100,3 +100,32 @@ body {
 .animate-fade-in {
   animation: fade-in 0.25s ease-out forwards;
 }
+
+/* Ícones flutuantes no hero (estilo Figma) */
+@keyframes float-hero {
+  0%,
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+  33% {
+    transform: translateY(-8px) translateX(4px);
+  }
+  66% {
+    transform: translateY(4px) translateX(-4px);
+  }
+}
+.animate-float-hero {
+  animation: float-hero 6s ease-in-out infinite;
+}
+.animate-float-hero-delay-1 {
+  animation: float-hero 7s ease-in-out 0.5s infinite;
+}
+.animate-float-hero-delay-2 {
+  animation: float-hero 8s ease-in-out 1s infinite;
+}
+.animate-float-hero-delay-3 {
+  animation: float-hero 6.5s ease-in-out 1.5s infinite;
+}
+.animate-float-hero-delay-4 {
+  animation: float-hero 7.5s ease-in-out 2s infinite;
+}
