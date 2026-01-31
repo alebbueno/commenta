@@ -28,15 +28,30 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json().catch(() => ({}));
-    const { successUrl, cancelUrl } = (body || {}) as {
+    const { successUrl, cancelUrl, interval, locale } = (body || {}) as {
       successUrl?: string;
       cancelUrl?: string;
+      interval?: "monthly" | "annual";
+      locale?: "pt" | "en";
     };
 
-    const priceId = process.env.STRIPE_PRICE_ID_PRO;
+    const isBR = locale !== "en";
+    const isAnnual = interval === "annual";
+    const priceKey =
+      locale === "en"
+        ? isAnnual
+          ? "STRIPE_PRICE_US_ANNUAL"
+          : "STRIPE_PRICE_US_MONTHLY"
+        : isAnnual
+          ? "STRIPE_PRICE_BR_ANNUAL"
+          : "STRIPE_PRICE_BR_MONTHLY";
+    let priceId = process.env[priceKey];
+    if (!priceId) {
+      priceId = process.env.STRIPE_PRICE_ID_PRO;
+    }
     if (!priceId) {
       return NextResponse.json(
-        { error: "STRIPE_PRICE_ID_PRO is not configured" },
+        { error: "Stripe price not configured. Set STRIPE_PRICE_* or STRIPE_PRICE_ID_PRO." },
         { status: 500 }
       );
     }

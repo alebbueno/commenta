@@ -101,13 +101,16 @@ export function Pricing() {
                 ? `${pricing.currency} ${priceAnnualPerMonth} ${t.pricingPerMonth} — ${t.pricingBillingAnnual}`
                 : t.pricingBillingMonthly}
             </p>
+            {isAnnual && t.pricingInstallments && (
+              <p className="mt-1 text-xs text-white/70">{t.pricingInstallments}</p>
+            )}
             <Button
               variant="solid-inverse"
               className="mt-6 w-full"
               size="lg"
               asChild
             >
-              <Link href="#planos">{t.pricingCtaPro}</Link>
+              <Link href="/login?next=/dashboard">{t.pricingCtaPro}</Link>
             </Button>
             <ul className="mt-6 space-y-3">
               {t.pricingProFeatures.map((f, i) => (

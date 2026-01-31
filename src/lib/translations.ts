@@ -49,6 +49,17 @@ export const translations = {
     dashboardFreeShortDesc: "Pins, áreas destacadas e comentários textuais. 1 usuário.",
     dashboardUpgradeHint: "Faça upgrade para PRO para desbloquear todas as ferramentas e remover o branding.",
     dashboardStripeNote: "Cobrança via Stripe. Cancele quando quiser.",
+    dashboardPlanActive: "Plano ativo",
+    dashboardAccountInfo: "Sua conta",
+    dashboardMemberSince: "Membro desde",
+    dashboardQuickAccess: "Acesso rápido",
+    dashboardQuickAccessDesc: "Chave de licença, downloads do plugin e suporte.",
+    dashboardGoToPro: "Commenta PRO",
+    dashboardGoToSupport: "Suporte",
+    dashboardStatusActive: "Ativo",
+    dashboardStatusCanceled: "Cancelado",
+    dashboardStatusPastDue: "Pagamento pendente",
+    dashboardProBenefits: "Todas as ferramentas, usuários ilimitados, sem branding. Suporte incluso.",
 
     // Dashboard PRO (plugin)
     proTitle: "Commenta PRO",
@@ -186,6 +197,7 @@ export const translations = {
     pricingPerMonth: "/ mês",
     pricingPerYear: "/ ano",
     pricingBillingAnnual: "Cobrança anual",
+    pricingInstallments: "Ou parcelar no cartão",
     pricingBillingMonthly: "Cobrança mensal. Cancele quando quiser.",
     pricingCtaPro: "Começar agora",
     pricingCtaFree: "Começar grátis",
@@ -299,6 +311,17 @@ export const translations = {
     dashboardFreeShortDesc: "Pins, highlighted areas, and text comments. 1 user.",
     dashboardUpgradeHint: "Upgrade to PRO to unlock all tools and remove branding.",
     dashboardStripeNote: "Billed via Stripe. Cancel anytime.",
+    dashboardPlanActive: "Active plan",
+    dashboardAccountInfo: "Your account",
+    dashboardMemberSince: "Member since",
+    dashboardQuickAccess: "Quick access",
+    dashboardQuickAccessDesc: "License key, plugin downloads, and support.",
+    dashboardGoToPro: "Commenta PRO",
+    dashboardGoToSupport: "Support",
+    dashboardStatusActive: "Active",
+    dashboardStatusCanceled: "Canceled",
+    dashboardStatusPastDue: "Past due",
+    dashboardProBenefits: "All tools, unlimited users, no branding. Support included.",
 
     // Dashboard PRO (plugin)
     proTitle: "Commenta PRO",
@@ -430,6 +453,7 @@ export const translations = {
     pricingPerMonth: "/ mo",
     pricingPerYear: "/ yr",
     pricingBillingAnnual: "Billed annually",
+    pricingInstallments: "",
     pricingBillingMonthly: "Billed monthly. Cancel anytime.",
     pricingCtaPro: "Get started",
     pricingCtaFree: "Start free",
@@ -497,20 +521,20 @@ export const translations = {
 
 export type TranslationKeys = keyof (typeof translations)["pt"];
 
-// Pricing numbers: PT = BRL, EN = USD
+// Pricing: PT = Brasil (BRL), EN = Internacional (USD)
 export const pricingByLocale: Record<
   Locale,
   { monthly: number; annual: number; currency: string; format: (n: number) => string }
 > = {
   pt: {
-    monthly: 39.9,
+    monthly: 29.9,
     annual: 299,
     currency: "R$",
     format: (n) => n.toFixed(2).replace(".", ","),
   },
   en: {
-    monthly: 9.99,
-    annual: 79,
+    monthly: 29.9,
+    annual: 299,
     currency: "$",
     format: (n) => n.toFixed(2),
   },
