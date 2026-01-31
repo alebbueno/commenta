@@ -1,0 +1,9 @@
+export { Header } from "./header";
+export { Hero } from "./hero";
+export { Problem } from "./problem";
+export { CommentaPresentation } from "./commenta-presentation";
+export { HowItWorks } from "./how-it-works";
+export { Differentiators } from "./differentiators";
+export { Pricing } from "./pricing";
+export { SocialProof } from "./social-proof";
+export { Footer } from "./footer";
