@@ -35,6 +35,7 @@ function LoginContent() {
 
   const [mode, setMode] = useState<AuthMode>("login");
   const [email, setEmail] = useState("");
+  const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
   const [formError, setFormError] = useState<string | null>(null);
   const [submitLoading, setSubmitLoading] = useState(false);
@@ -66,6 +67,10 @@ function LoginContent() {
       setFormError(t.authEmailRequired);
       return;
     }
+    if (mode === "signup" && !fullName.trim()) {
+      setFormError(t.authNameRequired);
+      return;
+    }
     if (!password) {
       setFormError(t.authPasswordRequired);
       return;
@@ -79,7 +84,7 @@ function LoginContent() {
     const err =
       mode === "login"
         ? await signInWithEmail(email.trim(), password)
-        : await signUpWithEmail(email.trim(), password);
+        : await signUpWithEmail(email.trim(), password, fullName.trim());
     setSubmitLoading(false);
 
     if (err) {
@@ -157,13 +162,13 @@ function LoginContent() {
                   >
                     {t.authTabLogin}
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMode("signup");
-                      setFormError(null);
-                      setEmailSent(false);
-                    }}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMode("signup");
+                        setFormError(null);
+                        setEmailSent(false);
+                      }}
                     className={cn(
                       "flex-1 rounded-full px-4 py-2.5 text-sm font-medium transition-colors",
                       mode === "signup"
@@ -220,6 +225,26 @@ function LoginContent() {
                           disabled={submitLoading}
                         />
                       </div>
+                      {mode === "signup" && (
+                        <div className="space-y-2">
+                          <label
+                            htmlFor="auth-name"
+                            className="text-sm font-medium text-foreground"
+                          >
+                            {t.authName}
+                          </label>
+                          <Input
+                            id="auth-name"
+                            type="text"
+                            autoComplete="name"
+                            placeholder={t.authNamePlaceholder}
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            className="rounded-xl"
+                            disabled={submitLoading}
+                          />
+                        </div>
+                      )}
                       <div className="space-y-2">
                         <label
                           htmlFor="auth-password"

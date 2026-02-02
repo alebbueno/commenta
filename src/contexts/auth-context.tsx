@@ -18,7 +18,7 @@ type AuthContextValue = {
   loading: boolean;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<AuthError | null>;
-  signUpWithEmail: (email: string, password: string) => Promise<AuthError | null>;
+  signUpWithEmail: (email: string, password: string, fullName?: string) => Promise<AuthError | null>;
   signOut: () => Promise<void>;
 };
 
@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   const signUpWithEmail = useCallback(
-    async (email: string, password: string): Promise<AuthError | null> => {
+    async (email: string, password: string, fullName?: string): Promise<AuthError | null> => {
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -82,6 +82,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           emailRedirectTo: typeof window !== "undefined"
             ? `${window.location.origin}/auth/callback?next=/dashboard`
             : undefined,
+          data: fullName ? { full_name: fullName.trim() } : undefined,
         },
       });
       if (error) return { message: error.message };
