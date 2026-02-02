@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
     request: { headers: request.headers },
   });
 
-  const country = request.geo?.country ?? request.headers.get("x-vercel-ip-country") ?? "";
+  const country = request.headers.get("x-vercel-ip-country") ?? "";
   if (country === "BR") {
     response.cookies.set(COUNTRY_COOKIE, "BR", { path: "/", maxAge: 60 * 60 * 24 * 365 });
   }
