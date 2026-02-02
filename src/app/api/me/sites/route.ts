@@ -18,6 +18,10 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      return NextResponse.json({ count: 0, sites: [] });
+    }
+
     const admin = createAdminClient();
 
     const { data: profile } = await admin
