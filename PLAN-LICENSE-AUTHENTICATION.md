@@ -195,12 +195,15 @@ Assim, ao concluir o checkout, o usuário vira Pro e recebe uma licença (chave 
 ### 8.2 API de validação para o plugin
 
 - **Rota:** `POST /api/validate-license`
-- **Body (JSON):** `{ "token": "<license_key>", "site_url": "<site_url>" }`
+- **Body (JSON):**
+  - `token` (obrigatório): chave de licença copiada da dashboard.
+  - `site_url` (recomendado): URL do site WordPress (ex.: `get_site_url()` ou `home_url()`). Quando enviado e o token for válido PRO, a dashboard **grava ou atualiza** o site na tabela `license_sites` (para histórico e controle de ativações).
+  - `site_name` (opcional): nome do site (ex.: `get_bloginfo('name')`).
 - **Resposta (200):**
   - Válido: `{ "valid": true, "plan": "pro" }`
   - Inválido: `{ "valid": false, "message": "..." }` (ex.: token inválido, licença revogada, plano não é Pro)
 
-O plugin WordPress deve chamar essa URL (ex.: `https://dashboard.commenta.com.br/api/validate-license`) com o token que o usuário colou nas Configurações e o `site_url()` do site. A dashboard consulta `licenses` e `profiles` (via `SUPABASE_SERVICE_ROLE_KEY`) e responde se o token é válido e o plano é Pro.
+O plugin WordPress deve chamar essa URL (ex.: `https://dashboard.commenta.com.br/api/validate-license`) com o token que o usuário colou nas Configurações e o `site_url` do site. A dashboard consulta `licenses` e `profiles` (via `SUPABASE_SERVICE_ROLE_KEY`); se o plano for Pro, registra o site em `license_sites` e responde `valid: true`.
 
 ### 8.3 Variáveis de ambiente necessárias
 

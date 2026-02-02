@@ -4,18 +4,33 @@ import { createAdminClient } from "@/lib/supabase/admin";
 /**
  * API chamada pelo plugin WordPress para validar o token de licença.
  * POST /api/validate-license
- * Body: { "token": "<license_key>", "site_url": "<site_url>" }
+ * Body: { "token": "<license_key>", "site_url": "<site_url>", "site_name"?: "<nome>" }
+ * - token: obrigatório.
+ * - site_url: obrigatório para gravar o site; ao validar PRO, o backend registra/atualiza o site.
+ * - site_name: opcional (ex.: nome do site no WordPress).
  * Resposta: { "valid": true, "plan": "pro" } ou { "valid": false, "message": "..." }
- *
- * Conforme PLAN-LICENSE-AUTHENTICATION.md: o plugin envia token + site_url;
- * a dashboard valida o token (licença ativa + usuário Pro) e devolve se o plano é pro.
  */
+function normalizeSiteUrl(input: string): string {
+  let url = input.trim().toLowerCase();
+  if (!url) return "";
+  if (!/^https?:\/\//i.test(url)) url = `https://${url}`;
+  try {
+    const u = new URL(url);
+    url = u.origin; // scheme + host + port (sem path)
+  } catch {
+    return input.trim().toLowerCase();
+  }
+  return url.replace(/\/$/, "");
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => ({}));
     const token = typeof body?.token === "string" ? body.token.trim() : "";
-    const siteUrl =
+    const siteUrlRaw =
       typeof body?.site_url === "string" ? body.site_url.trim() : "";
+    const siteName =
+      typeof body?.site_name === "string" ? body.site_name.trim() : "";
 
     if (!token) {
       return NextResponse.json(
@@ -64,6 +79,18 @@ export async function POST(request: Request) {
         { valid: false, message: "Plano não é Pro." },
         { status: 200 }
       );
+    }
+
+    // Sempre gravar o site quando token PRO é válido e site_url foi enviado
+    if (siteUrlRaw) {
+      const siteUrl = normalizeSiteUrl(siteUrlRaw);
+      if (siteUrl) {
+        await supabase.rpc("upsert_license_site", {
+          p_license_id: license.id,
+          p_site_url: siteUrl,
+          p_site_name: siteName || null,
+        });
+      }
     }
 
     return NextResponse.json({

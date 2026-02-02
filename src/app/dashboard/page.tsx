@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Sparkles, CreditCard, User, ChevronRight, HeadphonesIcon } from "lucide-react";
+import { Sparkles, CreditCard, User, ChevronRight, HeadphonesIcon, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -54,6 +54,7 @@ export default function DashboardPage() {
   const { user } = useAuth();
   const { t, locale, pricing } = useLocale();
   const [profile, setProfile] = useState<Profile | null>(null);
+  const [sitesCount, setSitesCount] = useState<number | null>(null);
   const [loadingCheckout, setLoadingCheckout] = useState(false);
   const [interval, setInterval] = useState<"monthly" | "annual">("annual");
 
@@ -63,6 +64,14 @@ export default function DashboardPage() {
       .then((data) => data && setProfile(data))
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    if (!profile || profile.plan !== "pro") return;
+    fetch("/api/me/sites")
+      .then((res) => res.ok && res.json())
+      .then((data) => { if (typeof data?.count === "number") setSitesCount(data.count); })
+      .catch(() => {});
+  }, [profile?.plan]);
 
   const displayName = getDisplayName(profile, user);
   const price = interval === "annual" ? pricing.annual : pricing.monthly;
@@ -156,6 +165,33 @@ export default function DashboardPage() {
                 </Link>
               </Button>
             </CardFooter>
+          </Card>
+
+          {/* Sites ativos */}
+          <Card className="rounded-2xl border border-border/50 shadow-lg lg:col-span-2">
+            <CardHeader className="flex flex-row items-center justify-between gap-4 p-6">
+              <div className="flex items-center gap-3">
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-header-accent/10">
+                  <Globe className="size-5 text-header-accent" />
+                </div>
+                <div>
+                  <CardTitle className="text-base font-semibold">
+                    {t.dashboardActiveSites}
+                  </CardTitle>
+                  <CardDescription className="text-muted-foreground">
+                    {sitesCount !== null
+                      ? `${sitesCount} ${t.dashboardActiveSitesCount}`
+                      : "—"}
+                  </CardDescription>
+                </div>
+              </div>
+              <Button variant="outline" size="sm" className="rounded-full shrink-0" asChild>
+                <Link href="/dashboard/sites">
+                  {t.dashboardViewSitesList}
+                  <ChevronRight className="ml-1 size-4" />
+                </Link>
+              </Button>
+            </CardHeader>
           </Card>
 
           {/* Acesso rápido */}

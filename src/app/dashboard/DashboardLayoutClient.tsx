@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, LogOut, CreditCard, Sparkles, HeadphonesIcon } from "lucide-react";
+import { LayoutDashboard, LogOut, CreditCard, Sparkles, HeadphonesIcon, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/auth-context";
 import { useLocale } from "@/contexts/locale-context";
@@ -17,6 +17,7 @@ const baseNavKeys = [
 
 const proNavKeys = [
   { href: "/dashboard/pro", key: "proTitle" as const, icon: Sparkles },
+  { href: "/dashboard/sites", key: "sitesNav" as const, icon: Globe },
   { href: "/dashboard/suporte", key: "supportTitle" as const, icon: HeadphonesIcon },
 ];
 
@@ -116,7 +117,9 @@ export function DashboardLayoutClient({
                     href={href}
                     className={cn(
                       "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors",
-                      pathname === href || (href === "/dashboard/suporte" && pathname.startsWith("/dashboard/suporte/"))
+                      pathname === href ||
+                      (href === "/dashboard/suporte" && pathname.startsWith("/dashboard/suporte/")) ||
+                      (href === "/dashboard/sites" && pathname.startsWith("/dashboard/sites"))
                         ? "bg-muted text-foreground"
                         : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
                     )}
