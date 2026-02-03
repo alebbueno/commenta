@@ -4,11 +4,10 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 const SLIDES = [
-  { src: "/print-admin.png", alt: "Painel Commenta no WordPress" },
-  { src: "/print-box-task.png", alt: "Caixa de tarefa e ferramentas" },
-  { src: "/print-modal-comments.png", alt: "Modal de comentários" },
-  { src: "/print-pin.png", alt: "Pin e anotações na página" },
-  { src: "/print-task.png", alt: "Tarefa e conteúdo" },
+  { src: "/slide-01.png", alt: "Commenta — Painel no WordPress" },
+  { src: "/slide-02.png", alt: "Commenta — Projeto e anotações na página" },
+  { src: "/slide-03.png", alt: "Commenta — Comentários e feedback" },
+  { src: "/slide-04.png", alt: "Commenta — Banner e ferramentas" },
 ];
 
 const SLIDE_HEIGHT_PX = 600;
