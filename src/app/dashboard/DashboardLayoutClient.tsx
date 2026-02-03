@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, LogOut, CreditCard, Sparkles, HeadphonesIcon, Globe } from "lucide-react";
+import { LayoutDashboard, LogOut, CreditCard, Sparkles, HeadphonesIcon, Globe, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/auth-context";
 import { useLocale } from "@/contexts/locale-context";
@@ -30,12 +30,21 @@ export function DashboardLayoutClient({
   const { t } = useLocale();
   const pathname = usePathname();
   const [plan, setPlan] = useState<"free" | "pro" | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     if (!user) return;
     fetch("/api/me")
       .then((res) => res.ok && res.json())
       .then((data) => data?.plan && setPlan(data.plan))
+      .catch(() => {});
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+    fetch("/api/admin/me")
+      .then((res) => res.ok && res.json())
+      .then((data) => data?.admin && setIsAdmin(true))
       .catch(() => {});
   }, [user]);
 
@@ -128,6 +137,20 @@ export function DashboardLayoutClient({
                     {t[key]}
                   </Link>
                 ))}
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  className={cn(
+                    "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors border-t border-border/50 mt-2 pt-2",
+                    pathname.startsWith("/admin")
+                      ? "bg-muted text-foreground"
+                      : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                  )}
+                >
+                  <Shield className="size-5 shrink-0 text-header-accent" />
+                  Painel admin
+                </Link>
+              )}
             </nav>
           </aside>
           <main className="min-w-0 flex-1">{children}</main>

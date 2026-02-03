@@ -18,7 +18,7 @@ export async function GET() {
 
   const { data: versions, error } = await admin
     .from("plugin_versions")
-    .select("id, version, release_date, description, file_name, changelog_url, download_url, is_prerelease, release_channel, created_at")
+    .select("id, version, release_date, description, file_name, changelog_url, changelog_text, download_url, is_prerelease, release_channel, created_at")
     .order("release_date", { ascending: false });
 
   if (error) {

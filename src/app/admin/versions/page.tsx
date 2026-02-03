@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Package, Plus, ExternalLink } from "lucide-react";
+import { ArrowLeft, Package, Plus, ExternalLink, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,6 +21,7 @@ type VersionRow = {
   description: string | null;
   file_name: string | null;
   changelog_url: string | null;
+  changelog_text: string | null;
   download_url: string | null;
   is_prerelease: boolean;
   release_channel: string | null;
@@ -31,8 +32,11 @@ export default function AdminVersionsPage() {
   const [versions, setVersions] = useState<VersionRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [uploadFile, setUploadFile] = useState<File | null>(null);
   const [form, setForm] = useState({
     version: "",
     release_date: new Date().toISOString().slice(0, 10),
@@ -56,46 +60,118 @@ export default function AdminVersionsPage() {
     loadVersions();
   }, []);
 
+  const openEdit = (v: VersionRow) => {
+    setEditingId(v.id);
+    setForm({
+      version: v.version,
+      release_date: v.release_date ? v.release_date.slice(0, 10) : new Date().toISOString().slice(0, 10),
+      description: v.description ?? "",
+      changelog_url: v.changelog_url ?? "",
+      changelog_text: v.changelog_text ?? "",
+      download_url: v.download_url ?? "",
+      file_name: v.file_name ?? "",
+      is_prerelease: v.is_prerelease,
+      release_channel: (v.release_channel as "stable" | "beta" | "alpha") ?? "stable",
+    });
+    setError(null);
+    setShowForm(true);
+  };
+
+  const initialForm = () => ({
+    version: "",
+    release_date: new Date().toISOString().slice(0, 10),
+    description: "",
+    changelog_url: "",
+    changelog_text: "",
+    download_url: "",
+    file_name: "",
+    is_prerelease: false,
+    release_channel: "stable",
+  });
+
+  const closeForm = () => {
+    setShowForm(false);
+    setEditingId(null);
+    setUploadFile(null);
+    setForm(initialForm());
+    setError(null);
+  };
+
+  const openNew = () => {
+    setEditingId(null);
+    setUploadFile(null);
+    setForm(initialForm());
+    setError(null);
+    setShowForm(true);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setSubmitting(true);
     try {
-      const res = await fetch("/api/admin/versions", {
-        method: "POST",
+      let download_url = form.download_url.trim();
+      let file_name = form.file_name.trim();
+
+      if (uploadFile) {
+        const fd = new FormData();
+        fd.append("file", uploadFile);
+        if (form.version.trim()) fd.append("version", form.version.trim());
+        const uploadRes = await fetch("/api/admin/versions/upload", {
+          method: "POST",
+          body: fd,
+        });
+        const uploadData = await uploadRes.json().catch(() => ({}));
+        if (!uploadRes.ok) {
+          setError(uploadData?.error ?? "Erro ao enviar o arquivo");
+          return;
+        }
+        download_url = uploadData.download_url ?? "";
+        file_name = uploadData.file_name ?? uploadFile.name;
+      }
+
+      const payload = {
+        version: form.version.trim(),
+        release_date: form.release_date || undefined,
+        description: form.description.trim() || undefined,
+        changelog_url: form.changelog_url.trim() || undefined,
+        changelog_text: form.changelog_text.trim() || undefined,
+        download_url: download_url || undefined,
+        file_name: file_name || undefined,
+        is_prerelease: form.is_prerelease,
+        release_channel: form.release_channel,
+      };
+      const url = editingId ? `/api/admin/versions/${editingId}` : "/api/admin/versions";
+      const res = await fetch(url, {
+        method: editingId ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          version: form.version.trim(),
-          release_date: form.release_date || undefined,
-          description: form.description.trim() || undefined,
-          changelog_url: form.changelog_url.trim() || undefined,
-          changelog_text: form.changelog_text.trim() || undefined,
-          download_url: form.download_url.trim() || undefined,
-          file_name: form.file_name.trim() || undefined,
-          is_prerelease: form.is_prerelease,
-          release_channel: form.release_channel,
-        }),
+        body: JSON.stringify(payload),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setError(data?.error ?? "Erro ao criar versão");
+        setError(data?.error ?? (editingId ? "Erro ao atualizar versão" : "Erro ao criar versão"));
         return;
       }
-      setForm({
-        version: "",
-        release_date: new Date().toISOString().slice(0, 10),
-        description: "",
-        changelog_url: "",
-        changelog_text: "",
-        download_url: "",
-        file_name: "",
-        is_prerelease: false,
-        release_channel: "stable",
-      });
-      setShowForm(false);
+      closeForm();
       loadVersions();
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (v: VersionRow) => {
+    if (!confirm(`Apagar a versão "${v.version}"? Esta ação não pode ser desfeita.`)) return;
+    setDeletingId(v.id);
+    try {
+      const res = await fetch(`/api/admin/versions/${v.id}`, { method: "DELETE" });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        alert(data?.error ?? "Erro ao apagar versão");
+        return;
+      }
+      loadVersions();
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -117,14 +193,23 @@ export default function AdminVersionsPage() {
         <Card className="rounded-2xl border border-header-accent/30 shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between p-6">
             <CardTitle className="flex items-center gap-2 text-base font-semibold">
-              <Plus className="size-5 text-header-accent" />
-              Nova versão
+              {editingId ? (
+                <>
+                  <Pencil className="size-5 text-header-accent" />
+                  Editar versão
+                </>
+              ) : (
+                <>
+                  <Plus className="size-5 text-header-accent" />
+                  Nova versão
+                </>
+              )}
             </CardTitle>
             <Button
               variant="ghost"
               size="sm"
               className="rounded-full"
-              onClick={() => setShowForm(false)}
+              onClick={closeForm}
             >
               Fechar
             </Button>
@@ -173,6 +258,25 @@ export default function AdminVersionsPage() {
                   placeholder="Release notes curtas"
                 />
               </div>
+              <div>
+                <label className="mb-1 block text-sm font-medium text-foreground">
+                  Arquivo .zip do plugin (opcional)
+                </label>
+                <p className="mb-2 text-xs text-muted-foreground">
+                  Enviar para o bucket plugin-releases no Supabase. Máx. 4MB. Se não enviar, use a URL abaixo.
+                </p>
+                <Input
+                  type="file"
+                  accept=".zip"
+                  className="rounded-xl border-dashed file:mr-3 file:rounded-lg file:border-0 file:bg-header-accent/10 file:px-4 file:py-2 file:text-sm file:font-medium file:text-header-accent"
+                  onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
+                />
+                {uploadFile && (
+                  <p className="mt-1.5 text-sm text-muted-foreground">
+                    Selecionado: {uploadFile.name} ({(uploadFile.size / 1024).toFixed(1)} KB)
+                  </p>
+                )}
+              </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-1 block text-sm font-medium text-foreground">
@@ -183,7 +287,7 @@ export default function AdminVersionsPage() {
                     type="url"
                     value={form.download_url}
                     onChange={(e) => setForm((f) => ({ ...f, download_url: e.target.value }))}
-                    placeholder="https://..."
+                    placeholder="https://... (ou use o upload acima)"
                   />
                 </div>
                 <div>
@@ -258,7 +362,11 @@ export default function AdminVersionsPage() {
                   className="rounded-full"
                   disabled={submitting || !form.version.trim()}
                 >
-                  {submitting ? "Salvando…" : "Cadastrar versão"}
+                  {submitting
+                    ? "Salvando…"
+                    : editingId
+                      ? "Atualizar versão"
+                      : "Cadastrar versão"}
                 </Button>
               </div>
             </form>
@@ -282,7 +390,7 @@ export default function AdminVersionsPage() {
               variant="header-accent"
               size="sm"
               className="rounded-full"
-              onClick={() => setShowForm(true)}
+              onClick={openNew}
             >
               <Plus className="mr-2 size-4" />
               Nova versão
@@ -304,7 +412,7 @@ export default function AdminVersionsPage() {
                     <th className="px-4 py-3 font-medium text-foreground">Release</th>
                     <th className="px-4 py-3 font-medium text-foreground">Arquivo</th>
                     <th className="px-4 py-3 font-medium text-foreground">Download</th>
-                    <th className="w-10 px-2 py-3" aria-hidden />
+                    <th className="px-4 py-3 font-medium text-foreground">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -347,18 +455,41 @@ export default function AdminVersionsPage() {
                           "—"
                         )}
                       </td>
-                      <td className="px-2 py-3">
-                        {v.download_url && (
-                          <a
-                            href={v.download_url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
-                            aria-label="Abrir download"
+                      <td className="px-4 py-3">
+                        <div className="flex items-center gap-1">
+                          {v.download_url && (
+                            <a
+                              href={v.download_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                              aria-label="Abrir download"
+                            >
+                              <ExternalLink className="size-4" />
+                            </a>
+                          )}
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="size-8 rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+                            onClick={() => openEdit(v)}
+                            aria-label="Editar versão"
                           >
-                            <ExternalLink className="size-4" />
-                          </a>
-                        )}
+                            <Pencil className="size-4" />
+                          </Button>
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="size-8 rounded-lg text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+                            onClick={() => handleDelete(v)}
+                            disabled={deletingId === v.id}
+                            aria-label="Apagar versão"
+                          >
+                            <Trash2 className="size-4" />
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   ))}
