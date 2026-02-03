@@ -139,7 +139,7 @@ export const translations = {
     heroHeadlineEnd: " que ninguém entende.",
     heroSub:
       "Para sites feitos em WordPress. Você e seu cliente comentam direto na página. Pins, setas, círculos — tudo vira tarefa clara, com contexto visual. Sem WhatsApp infinito, sem e-mail perdido, sem retrabalho. Só aprovação rápida e entrega no prazo.",
-    heroCtaPrimary: "Testar Grátis por 14 dias (sem cartão)",
+    heroCtaPrimary: "Quero aprovar sem caos",
     heroCtaSecondary: "Ver planos",
     heroNoCard: "Sem cartão necessário",
     heroDaysFree: "14 dias grátis",
@@ -419,7 +419,7 @@ export const translations = {
     heroHeadlineEnd: " that nobody understands.",
     heroSub:
       "For sites built with WordPress. You and your client comment right on the page. Pins, arrows, circles — everything becomes a clear task with visual context. No endless WhatsApp, no lost emails, no rework. Just fast approval and on-time delivery.",
-    heroCtaPrimary: "Try free for 14 days (no card)",
+    heroCtaPrimary: "I want to approve without chaos",
     heroCtaSecondary: "See pricing",
     heroNoCard: "No card required",
     heroDaysFree: "14-day free trial",

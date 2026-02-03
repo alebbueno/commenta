@@ -53,7 +53,6 @@ export function Footer() {
               <p className="text-base font-semibold text-white sm:text-lg">
                 {t.footerCtaTitle}
               </p>
-              <p className="mt-1 text-sm text-white/70">{t.footerCtaSub}</p>
             </div>
             <Button
               variant="header-accent"
@@ -85,10 +84,10 @@ export function Footer() {
             <div className="mt-6 flex items-center gap-2 text-sm text-white/70">
               <Mail className="size-4 shrink-0" />
               <a
-                href="mailto:contato@commenta.com.br"
+                href="mailto:support@commenta.site"
                 className="hover:text-white"
               >
-                contato@commenta.com.br
+                support@commenta.site
               </a>
             </div>
           </div>
