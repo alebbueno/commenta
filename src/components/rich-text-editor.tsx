@@ -93,9 +93,12 @@ export function RichTextEditor({
 
   const switchToVisual = useCallback(() => {
     const raw = textareaRef.current?.value ?? value;
-    lastValueRef.current = raw.trim();
-    onChange(raw.trim());
+    const trimmed = raw.trim();
+    onChange(trimmed);
     setViewMode("visual");
+    // Força o useEffect a aplicar o HTML no contenteditable (no próximo render o div
+    // é montado e value !== lastValueRef faz o efeito preencher ref.current.innerHTML).
+    lastValueRef.current = "";
     setTimeout(() => ref.current?.focus(), 0);
   }, [value, onChange]);
 
