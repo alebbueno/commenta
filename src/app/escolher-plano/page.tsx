@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { useAuth } from "@/contexts/auth-context";
 import { useLocale } from "@/contexts/locale-context";
 import { Pricing } from "@/components/sections/pricing";
@@ -72,29 +71,6 @@ export default function EscolherPlanoPage() {
           Voltar ao dashboard
         </Link>
       </div>
-
-      <section className="relative z-10 border-b border-border/40 pt-6 pb-14 sm:pt-8 sm:pb-20 md:pt-10 md:pb-24">
-        <div className="container mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="mx-auto max-w-2xl text-center">
-            <Link href="/" className="inline-block" aria-label="Commenta">
-              <Image
-                src="/commenta-pt.png"
-                alt="Commenta"
-                width={140}
-                height={44}
-                className="h-8 w-auto sm:h-9"
-                priority
-              />
-            </Link>
-            <h1 className="mt-6 text-2xl font-bold tracking-tight text-foreground sm:text-3xl md:text-4xl">
-              Escolha seu plano
-            </h1>
-            <p className="mt-3 text-base text-muted-foreground sm:mt-4">
-              Selecione o plano PRO e finalize o pagamento para ativar sua licença.
-            </p>
-          </div>
-        </div>
-      </section>
 
       <Pricing
         onProCtaClick={handleProCta}
