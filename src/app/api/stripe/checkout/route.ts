@@ -65,6 +65,7 @@ export async function POST(request: Request) {
       success_url: successUrl ?? `${appUrl}/dashboard?success=1`,
       cancel_url: cancelUrl ?? `${appUrl}/dashboard`,
       customer_email: user.email,
+      allow_promotion_codes: true,
       metadata: {
         supabase_user_id: user.id,
       },
