@@ -16,9 +16,9 @@ type AuthContextValue = {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  signInWithGoogle: () => Promise<void>;
+  signInWithGoogle: (redirectPath?: string) => Promise<void>;
   signInWithEmail: (email: string, password: string) => Promise<AuthError | null>;
-  signUpWithEmail: (email: string, password: string, fullName?: string) => Promise<AuthError | null>;
+  signUpWithEmail: (email: string, password: string, fullName?: string, redirectPath?: string) => Promise<AuthError | null>;
   signOut: () => Promise<void>;
 };
 
@@ -48,18 +48,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => subscription.unsubscribe();
   }, [supabase.auth]);
 
-  const signInWithGoogle = useCallback(async () => {
-    const appUrl =
-      typeof window !== "undefined"
-        ? window.location.origin
-        : process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${appUrl}/auth/callback?next=/dashboard`,
-      },
-    });
-  }, [supabase.auth]);
+  const signInWithGoogle = useCallback(
+    async (redirectPath = "/dashboard") => {
+      const appUrl =
+        typeof window !== "undefined"
+          ? window.location.origin
+          : process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+      const next = redirectPath.startsWith("/") ? redirectPath : `/${redirectPath}`;
+      await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: `${appUrl}/auth/callback?next=${encodeURIComponent(next)}`,
+        },
+      });
+    },
+    [supabase.auth]
+  );
 
   const signInWithEmail = useCallback(
     async (email: string, password: string): Promise<AuthError | null> => {
@@ -74,14 +78,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   const signUpWithEmail = useCallback(
-    async (email: string, password: string, fullName?: string): Promise<AuthError | null> => {
+    async (
+      email: string,
+      password: string,
+      fullName?: string,
+      redirectPath = "/dashboard"
+    ): Promise<AuthError | null> => {
+      const next = redirectPath.startsWith("/") ? redirectPath : `/${redirectPath}`;
       const { error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: typeof window !== "undefined"
-            ? `${window.location.origin}/auth/callback?next=/dashboard`
-            : undefined,
+          emailRedirectTo:
+            typeof window !== "undefined"
+              ? `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`
+              : undefined,
           data: fullName ? { full_name: fullName.trim() } : undefined,
         },
       });

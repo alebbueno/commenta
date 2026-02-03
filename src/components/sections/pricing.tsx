@@ -7,7 +7,23 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useLocale } from "@/contexts/locale-context";
 
-export function Pricing() {
+type PricingProps = {
+  /** Se definido, o botão PRO chama esta função com o intervalo escolhido (ex.: checkout). Senão, usa link para login. */
+  onProCtaClick?: (interval: "monthly" | "annual") => void | Promise<void>;
+  /** Usado quando onProCtaClick está em andamento (ex.: redirecionando ao Stripe). */
+  proCtaLoading?: boolean;
+  /** Link do CTA PRO quando onProCtaClick não é usado. */
+  proCtaHref?: string;
+  /** Link do CTA FREE (ex.: /dashboard na página de escolha de plano). */
+  freeCtaHref?: string;
+};
+
+export function Pricing({
+  onProCtaClick,
+  proCtaLoading = false,
+  proCtaHref = "/login?plan=pro",
+  freeCtaHref = "#planos",
+}: PricingProps = {}) {
   const [isAnnual, setIsAnnual] = useState(false);
   const { t, pricing } = useLocale();
 
@@ -104,14 +120,26 @@ export function Pricing() {
             {isAnnual && t.pricingInstallments && (
               <p className="mt-1 text-xs text-white/70">{t.pricingInstallments}</p>
             )}
-            <Button
-              variant="solid-inverse"
-              className="mt-6 w-full"
-              size="lg"
-              asChild
-            >
-              <Link href="/login?next=/dashboard">{t.pricingCtaPro}</Link>
-            </Button>
+            {onProCtaClick ? (
+              <Button
+                variant="solid-inverse"
+                className="mt-6 w-full"
+                size="lg"
+                disabled={proCtaLoading}
+                onClick={() => onProCtaClick(isAnnual ? "annual" : "monthly")}
+              >
+                {proCtaLoading ? "..." : t.pricingCtaPro}
+              </Button>
+            ) : (
+              <Button
+                variant="solid-inverse"
+                className="mt-6 w-full"
+                size="lg"
+                asChild
+              >
+                <Link href={proCtaHref}>{t.pricingCtaPro}</Link>
+              </Button>
+            )}
             <ul className="mt-6 space-y-3">
               {t.pricingProFeatures.map((f, i) => (
                 <li
@@ -145,7 +173,7 @@ export function Pricing() {
               size="lg"
               asChild
             >
-              <Link href="#planos">{t.pricingCtaFree}</Link>
+              <Link href={freeCtaHref}>{t.pricingCtaFree}</Link>
             </Button>
             <ul className="mt-6 space-y-3">
               {t.pricingFreeFeatures.map((f, i) => (

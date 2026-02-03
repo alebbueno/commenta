@@ -32,8 +32,9 @@ function LoginContent() {
   } = useAuth();
   const searchParams = useSearchParams();
   const urlError = searchParams.get("error") === "auth";
+  const planPro = searchParams.get("plan") === "pro";
 
-  const [mode, setMode] = useState<AuthMode>("login");
+  const [mode, setMode] = useState<AuthMode>(planPro ? "signup" : "login");
   const [email, setEmail] = useState("");
   const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
@@ -43,9 +44,9 @@ function LoginContent() {
 
   useEffect(() => {
     if (!loading && user) {
-      window.location.href = "/dashboard";
+      window.location.href = planPro ? "/escolher-plano" : "/dashboard";
     }
-  }, [user, loading]);
+  }, [user, loading, planPro]);
 
   if (loading) {
     return (
@@ -81,10 +82,11 @@ function LoginContent() {
     }
 
     setSubmitLoading(true);
+    const redirectPath = planPro ? "/escolher-plano" : undefined;
     const err =
       mode === "login"
         ? await signInWithEmail(email.trim(), password)
-        : await signUpWithEmail(email.trim(), password, fullName.trim());
+        : await signUpWithEmail(email.trim(), password, fullName.trim(), redirectPath);
     setSubmitLoading(false);
 
     if (err) {
@@ -297,7 +299,7 @@ function LoginContent() {
                       variant="outline"
                       size="lg"
                       className="w-full rounded-full font-medium"
-                      onClick={() => signInWithGoogle()}
+                      onClick={() => signInWithGoogle(planPro ? "/escolher-plano" : undefined)}
                       disabled={submitLoading}
                     >
                       <svg
