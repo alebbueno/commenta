@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Package, Plus, ExternalLink, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, Package, Plus, ExternalLink, Pencil, Trash2, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,6 +12,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { RichTextEditor } from "@/components/rich-text-editor";
 import { cn } from "@/lib/utils";
 
 type VersionRow = {
@@ -37,6 +39,7 @@ export default function AdminVersionsPage() {
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
+  const [downloadSource, setDownloadSource] = useState<"upload" | "link">("link");
   const [form, setForm] = useState({
     version: "",
     release_date: new Date().toISOString().slice(0, 10),
@@ -62,6 +65,8 @@ export default function AdminVersionsPage() {
 
   const openEdit = (v: VersionRow) => {
     setEditingId(v.id);
+    setDownloadSource(v.download_url ? "link" : "upload");
+    setUploadFile(null);
     setForm({
       version: v.version,
       release_date: v.release_date ? v.release_date.slice(0, 10) : new Date().toISOString().slice(0, 10),
@@ -99,6 +104,7 @@ export default function AdminVersionsPage() {
 
   const openNew = () => {
     setEditingId(null);
+    setDownloadSource("link");
     setUploadFile(null);
     setForm(initialForm());
     setError(null);
@@ -113,7 +119,7 @@ export default function AdminVersionsPage() {
       let download_url = form.download_url.trim();
       let file_name = form.file_name.trim();
 
-      if (uploadFile) {
+      if (downloadSource === "upload" && uploadFile) {
         const fd = new FormData();
         fd.append("file", uploadFile);
         if (form.version.trim()) fd.append("version", form.version.trim());
@@ -259,59 +265,78 @@ export default function AdminVersionsPage() {
                 />
               </div>
               <div>
-                <label className="mb-1 block text-sm font-medium text-foreground">
-                  Arquivo .zip do plugin (opcional)
+                <label className="mb-2 block text-sm font-medium text-foreground">
+                  Download do plugin
                 </label>
-                <p className="mb-2 text-xs text-muted-foreground">
-                  Enviar para o bucket plugin-releases no Supabase. Máx. 4MB. Se não enviar, use a URL abaixo.
-                </p>
-                <Input
-                  type="file"
-                  accept=".zip"
-                  className="rounded-xl border-dashed file:mr-3 file:rounded-lg file:border-0 file:bg-header-accent/10 file:px-4 file:py-2 file:text-sm file:font-medium file:text-header-accent"
-                  onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
+                <Switch
+                  value={downloadSource}
+                  onChange={(v) => {
+                    setDownloadSource(v);
+                    if (v === "link") setUploadFile(null);
+                  }}
+                  options={[
+                    { value: "upload", label: "Upload" },
+                    { value: "link", label: "Link" },
+                  ]}
+                  aria-label="Escolher entre upload ou link"
                 />
-                {uploadFile && (
-                  <p className="mt-1.5 text-sm text-muted-foreground">
-                    Selecionado: {uploadFile.name} ({(uploadFile.size / 1024).toFixed(1)} KB)
-                  </p>
+                {downloadSource === "upload" ? (
+                  <div className="mt-3">
+                    <Input
+                      type="file"
+                      accept=".zip"
+                      className="rounded-xl border-dashed file:mr-3 file:rounded-lg file:border-0 file:bg-header-accent/10 file:px-4 file:py-2 file:text-sm file:font-medium file:text-header-accent"
+                      onChange={(e) => setUploadFile(e.target.files?.[0] ?? null)}
+                    />
+                    {uploadFile && (
+                      <p className="mt-1.5 text-sm text-muted-foreground">
+                        {uploadFile.name} ({(uploadFile.size / 1024).toFixed(1)} KB)
+                      </p>
+                    )}
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Bucket plugin-releases. Máx. 4MB.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="mt-3 grid gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className="mb-1 block text-xs font-medium text-muted-foreground">
+                        URL de download
+                      </label>
+                      <Input
+                        className="rounded-xl"
+                        type="url"
+                        value={form.download_url}
+                        onChange={(e) => setForm((f) => ({ ...f, download_url: e.target.value }))}
+                        placeholder="https://..."
+                      />
+                    </div>
+                    <div>
+                      <label className="mb-1 block text-xs font-medium text-muted-foreground">
+                        Nome do arquivo
+                      </label>
+                      <Input
+                        className="rounded-xl"
+                        value={form.file_name}
+                        onChange={(e) => setForm((f) => ({ ...f, file_name: e.target.value }))}
+                        placeholder="commenta-pro-1.0.2.zip"
+                      />
+                    </div>
+                  </div>
                 )}
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-foreground">
-                    URL de download
-                  </label>
-                  <Input
-                    className="rounded-xl"
-                    type="url"
-                    value={form.download_url}
-                    onChange={(e) => setForm((f) => ({ ...f, download_url: e.target.value }))}
-                    placeholder="https://... (ou use o upload acima)"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-foreground">
-                    Nome do arquivo
-                  </label>
-                  <Input
-                    className="rounded-xl"
-                    value={form.file_name}
-                    onChange={(e) => setForm((f) => ({ ...f, file_name: e.target.value }))}
-                    placeholder="commenta-pro-1.0.2.zip"
-                  />
-                </div>
               </div>
               <div>
                 <label className="mb-1 block text-sm font-medium text-foreground">
-                  Changelog (texto)
+                  Changelog (texto formatado)
                 </label>
-                <textarea
-                  className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm"
-                  rows={3}
+                <p className="mb-2 text-xs text-muted-foreground">
+                  Use a barra para negrito, itálico, listas e links. Exibido em /changelog/[versão].
+                </p>
+                <RichTextEditor
                   value={form.changelog_text}
-                  onChange={(e) => setForm((f) => ({ ...f, changelog_text: e.target.value }))}
-                  placeholder="Linha por linha ou markdown"
+                  onChange={(html) => setForm((f) => ({ ...f, changelog_text: html }))}
+                  placeholder="Digite o changelog…"
+                  minHeight="180px"
                 />
               </div>
               <div>
@@ -457,6 +482,18 @@ export default function AdminVersionsPage() {
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex items-center gap-1">
+                          {(v.changelog_text || v.changelog_url) && (
+                            <a
+                              href={`/changelog/${encodeURIComponent(v.version)}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex rounded-lg p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                              aria-label="Ver changelog"
+                              title="Ver changelog"
+                            >
+                              <FileText className="size-4" />
+                            </a>
+                          )}
                           {v.download_url && (
                             <a
                               href={v.download_url}
