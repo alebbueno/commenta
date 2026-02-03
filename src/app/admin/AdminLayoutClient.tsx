@@ -10,6 +10,7 @@ import {
   CreditCard,
   Globe,
   Package,
+  Headphones,
   LogOut,
   Shield,
 } from "lucide-react";
@@ -22,6 +23,7 @@ const navItems = [
   { href: "/admin/users", label: "Usuários", icon: Users },
   { href: "/admin/payments", label: "Pagamentos", icon: CreditCard },
   { href: "/admin/sites", label: "Sites em uso", icon: Globe },
+  { href: "/admin/support", label: "Suporte", icon: Headphones },
   { href: "/admin/versions", label: "Versões do plugin", icon: Package },
 ];
 
@@ -98,21 +100,24 @@ export function AdminLayoutClient({
 
       <div className="container mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
         <nav className="mb-8 flex flex-wrap gap-1 rounded-2xl border border-border/50 bg-muted/20 p-1.5">
-          {navItems.map(({ href, label, icon: Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              className={cn(
-                "flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors",
-                pathname === href
-                  ? "bg-background text-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-background/60 hover:text-foreground"
-              )}
-            >
-              <Icon className="size-4 shrink-0" />
-              {label}
-            </Link>
-          ))}
+          {navItems.map(({ href, label, icon: Icon }) => {
+            const active = pathname === href || (href !== "/admin" && pathname.startsWith(href + "/"));
+            return (
+              <Link
+                key={href}
+                href={href}
+                className={cn(
+                  "flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-colors",
+                  active
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:bg-background/60 hover:text-foreground"
+                )}
+              >
+                <Icon className="size-4 shrink-0" />
+                {label}
+              </Link>
+            );
+          })}
         </nav>
 
         <main className="min-w-0">{children}</main>
